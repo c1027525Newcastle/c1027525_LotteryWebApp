@@ -18,7 +18,7 @@ def excludes_character_check(form, field):
             not_allowed_chars = not_allowed_chars + char
 
     if not_allowed_chars != "":
-        raise ValidationError(f"Character {not_allowed_chars} is not allowed, try again")
+        raise ValidationError(f"Character {not_allowed_chars} is not allowed")
 
 
 def contains_check(form, data_field):
@@ -32,7 +32,7 @@ def contains_check(form, data_field):
 
     if not p.match(data_field.data):
         raise ValidationError("Password need at least 1 digit, 1 lowercase and uppercase character and 1 special "
-                              "character")
+                              "character e.g. !?%")
 
 
 def phone_format_check(form, phone_field):
