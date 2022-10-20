@@ -4,16 +4,21 @@ from wtforms.validators import ValidationError
 
 def excludes_character_check(form, field):
     """
-    Checks and raises an error message if the field contains any of the excluded characters
+    Checks and raises an error message, containing all characters that shouldn't have been entered, if the field
+    contains any of the excluded characters
     :param form: NOT SURE
     :param field: NOT SURE
     :return: Raises validation error message
     """
     excluded_chars = "*?!'^+%&/()=}][{$#@<>"
+    not_allowed_chars = ""
 
     for char in field.data:
         if char in excluded_chars:
-            raise ValidationError(f"Character {char} is not allowed, try again")
+            not_allowed_chars = not_allowed_chars + char
+
+    if not_allowed_chars != "":
+        raise ValidationError(f"Character {not_allowed_chars} is not allowed, try again")
 
 
 def contains_check(form, data_field):
