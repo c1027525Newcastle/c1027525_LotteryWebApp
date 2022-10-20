@@ -2,6 +2,8 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 
+#Testing commits messages
+
 # CONFIG
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'LongAndRandomSecretKey'
