@@ -1,12 +1,18 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
+"""
+The next 2 lines: Import the validators needed form wtforms and the functions that we build to validate data
+"""
+from wtforms.validators import DataRequired, Email, Length, EqualTo
+from users.validation import excludes_character_check, contains_check, phone_format_check
 
 
 class RegisterForm(FlaskForm):
-    email = StringField()
-    firstname = StringField()
-    lastname = StringField()
-    phone = StringField()
-    password = PasswordField()
-    confirm_password = PasswordField()
-    submit = SubmitField()
+    email = StringField(validators=[DataRequired(), Email()])
+    firstname = StringField(validators=[DataRequired(), excludes_character_check])
+    lastname = StringField(validators=[DataRequired(), excludes_character_check])
+    phone = StringField(validators=[DataRequired(), phone_format_check])
+    password = PasswordField(validators=[DataRequired(), Length(min=6, max=12), contains_check])
+    confirm_password = PasswordField(validators=[DataRequired(), Length(min=6, max=12),
+                                                 EqualTo('password', message='Both passwords must be equal!')])
+    submit = SubmitField(validators=[DataRequired()])
