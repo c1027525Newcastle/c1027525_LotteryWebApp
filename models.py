@@ -1,6 +1,8 @@
 from datetime import datetime
 from flask_login import UserMixin
 from app import db, app
+# COMMENT maybe
+import bcrypt
 
 
 class User(db.Model, UserMixin):
@@ -26,9 +28,9 @@ class User(db.Model, UserMixin):
         self.firstname = firstname
         self.lastname = lastname
         self.phone = phone
-        self.password = password
+        # COMMENT Encrypt password
+        self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         self.role = role
-
 
 
 class Draw(db.Model):
@@ -76,5 +78,3 @@ def init_db():
 
         db.session.add(admin)
         db.session.commit()
-
-
