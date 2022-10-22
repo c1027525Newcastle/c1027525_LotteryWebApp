@@ -4,7 +4,8 @@ import logging
 from flask import Blueprint, render_template, request, flash
 
 from app import db
-from models import Draw
+from models import User, Draw
+from sqlalchemy.orm import make_transient
 
 # CONFIG
 lottery_blueprint = Blueprint('lottery', __name__, template_folder='templates')
@@ -24,8 +25,17 @@ def add_draw():
         submitted_draw += request.form.get('no' + str(i + 1)) + ' '
     submitted_draw.strip()
 
+    # 3.3 Checking for the user and getting his respective draw_key
+    # 3.3 Need  to know how to know what user is logged so gonna need some code
+    # 3.3 Until then just keep this line id_user = 1 so we get the admin draw_key
+    id_user = 1
+    user = User.query.filter_by(id=id_user).first()
+    # 3.3 Might want to do an #if user: and do something else if user not in Draw()
+    draw_key = user.lottery_draw_key
+
     # create a new draw with the form data.
-    new_draw = Draw(user_id=1, numbers=submitted_draw, master_draw=False, lottery_round=0)  # TODO: update user_id [user_id=1 is a placeholder]
+    # 3.3 Added the draw_key as one of the parameters
+    new_draw = Draw(user_id=1, numbers=submitted_draw, master_draw=False, lottery_round=0, draw_key=draw_key)  # TODO: update user_id [user_id=1 is a placeholder]
 
     # add the new draw to the database
     db.session.add(new_draw)
@@ -44,6 +54,16 @@ def view_draws():
 
     # if playable draws exist
     if len(playable_draws) != 0:
+        # 3.4 COMMENT Same as above need to change this id_user way to a function that gets you the user id and prob
+        # an if if it doesn't
+        id_user = 1
+        user = User.query.filter_by(id=id_user).first()
+        draw_key = user.lottery_draw_key
+        for playable_draw in playable_draws:
+            make_transient(playable_draw)
+            playable_draw.view_lottery_draw(draw_key=draw_key)
+        #
+
         # re-render lottery page with playable draws
         return render_template('lottery/lottery.html', playable_draws=playable_draws)
     else:

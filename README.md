@@ -4,7 +4,10 @@
 >> COMMENT = need to comment the thing
 
 > TODO:
->>
+>> 3.2 Need to know how to have the draws encrypted by their
+> respective user lottery_draws_key (models.py) (Also did some
+> work in lottery/views.py) Actually need to make a function that
+> somehow finds out what user is logged in!!!
 
 > Questions:
 >> Is it okay if a moved the CONFIG from app.py to a .env
@@ -19,6 +22,8 @@
 >> Comment errors.html or html for that matter when
 > adding new stuff to it?
 > 
->> Make it so the admin password is also hashed?
+>> Comment in param for functions??
 > 
 >> Change name of validation.py?
+> 
+>> Task 3.2 

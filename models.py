@@ -3,6 +3,8 @@ from flask_login import UserMixin
 from app import db, app
 # COMMENT maybe
 import bcrypt
+# 3.2 Needed to generate encryption key
+from cryptography.fernet import Fernet
 
 
 class User(db.Model, UserMixin):
@@ -19,6 +21,8 @@ class User(db.Model, UserMixin):
     lastname = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(100), nullable=False, default='user')
+    # 3.2 COMMENT?
+    lottery_draw_key = db.Column(db.BLOB, nullable=True)
 
     # Define the relationship to Draw
     draws = db.relationship('Draw')
@@ -31,6 +35,8 @@ class User(db.Model, UserMixin):
         # COMMENT Encrypt password
         self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         self.role = role
+        # 3.2 Generate the encryption key for the draws of each user
+        self.lottery_draw_key = Fernet.generate_key()
 
 
 class Draw(db.Model):
@@ -56,13 +62,40 @@ class Draw(db.Model):
     # Lottery round that draw is used
     lottery_round = db.Column(db.Integer, nullable=False, default=0)
 
-    def __init__(self, user_id, numbers, master_draw, lottery_round):
+    # 3.3 Added the draw_key to parameters
+    def __init__(self, user_id, numbers, master_draw, lottery_round, draw_key):
         self.user_id = user_id
-        self.numbers = numbers
+        self.numbers = encrypt(numbers, draw_key)
         self.been_played = False
         self.matches_master = False
         self.master_draw = master_draw
         self.lottery_round = lottery_round
+
+    # 3.4 COMMENT
+    def view_lottery_draw(self, draw_key):
+        self.numbers = decrypt(self.numbers, draw_key)
+
+
+# 3.3 COMMENT
+def encrypt(data, draw_key):
+    """
+
+    :param data:
+    :param draw_key:
+    :return:
+    """
+    return Fernet(draw_key).encrypt(bytes(data, 'utf-8'))
+
+
+# 3.4 COMMENT
+def decrypt(data, draw_key):
+    """
+
+    :param data:
+    :param draw_key:
+    :return:
+    """
+    return Fernet(draw_key).decrypt(data).decode('utf-8')
 
 
 def init_db():
