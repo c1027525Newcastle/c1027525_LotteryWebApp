@@ -1,13 +1,19 @@
 # IMPORTS
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+# COMMENT .env
+import os
+from dotenv import load_dotenv
+# COMMENT on .env
+load_dotenv()
 
 # CONFIG
+# COMMENT on .env
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'LongAndRandomSecretKey'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lottery.db'
-app.config['SQLALCHEMY_ECHO'] = True
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_ECHO'] = os.getenv('SQLALCHEMY_ECHO') == 'True'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS') == 'True'
 
 # initialise database
 db = SQLAlchemy(app)
