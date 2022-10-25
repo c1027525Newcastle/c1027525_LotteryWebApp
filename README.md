@@ -10,20 +10,14 @@
 > somehow finds out what user is logged in!!!
 
 > Questions:
->> Is it okay if a moved the CONFIG from app.py to a .env
 > 
->> Is it okay if not all errors show up e.g.:If phone is incorrect
+>> Answer depends on what I want. Is it okay if not all errors show up e.g.:If phone is incorrect
 > and password is not the right length only password error will
 > show up (aka when a normal error that was not coded in the html
 > appears the other errors that are coded won't appear)
 >
->> Need to comment imports? Like come on
-> 
->> Comment errors.html or html for that matter when
-> adding new stuff to it?
-> 
->> Comment in param for functions??
-> 
->> Change name of validation.py?
-> 
+>> Need to comment imports? Nope
+>
 >> Task 3.2 
+> 
+>> Should also encrypt the winning draw? YES

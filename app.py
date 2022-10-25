@@ -1,10 +1,10 @@
-# IMPORTS
+"""
+210275256
+"""
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-# COMMENT .env
 import os
 from dotenv import load_dotenv
-# COMMENT on .env
 load_dotenv()
 
 # CONFIG
