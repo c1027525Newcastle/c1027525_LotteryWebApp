@@ -1,11 +1,9 @@
 # IMPORTS
-import logging
-
 from flask import Blueprint, render_template, request, flash
+from sqlalchemy.orm import make_transient
 
 from app import db
 from models import User, Draw
-from sqlalchemy.orm import make_transient
 
 # CONFIG
 lottery_blueprint = Blueprint('lottery', __name__, template_folder='templates')
@@ -26,8 +24,8 @@ def add_draw():
     submitted_draw.strip()
 
     # 3.3 Checking for the user and getting his respective draw_key
-    # 3.3 Need  to know how to know what user is logged so gonna need some code
-    # 3.3 Until then just keep this line id_user = 1 so we get the admin draw_key
+    # 3.3 Need  to know how to know what user is logged so going to need some code
+    # 3.3 Until then just keep this line id_user = 1, so we get the admin draw_key
     id_user = 1
     user = User.query.filter_by(id=id_user).first()
     # 3.3 Might want to do an #if user: and do something else if user not in Draw()
@@ -95,5 +93,3 @@ def play_again():
 
     flash("All played draws deleted.")
     return lottery()
-
-

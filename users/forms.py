@@ -7,6 +7,7 @@ from wtforms.validators import DataRequired, Email, Length, EqualTo
 from users.validation import excludes_character_check, contains_check, phone_format_check
 
 
+# COMMENT and check what was already written here at the start as to comment only the new code
 class RegisterForm(FlaskForm):
     # DO I NEED TO COMMENT THIS?
     email = StringField(validators=[DataRequired(), Email()])
@@ -17,4 +18,11 @@ class RegisterForm(FlaskForm):
     # CAN I ADD EXTRA? e.g. Length to confirm_password
     confirm_password = PasswordField(validators=[DataRequired(), Length(min=6, max=12),
                                                  EqualTo('password', message='Both passwords must be equal!')])
+    submit = SubmitField()
+
+
+# 4 COMMENT
+class LoginForm(FlaskForm):
+    email_check = StringField(validators=[DataRequired()])
+    password_check = PasswordField(validators=[DataRequired()])
     submit = SubmitField()

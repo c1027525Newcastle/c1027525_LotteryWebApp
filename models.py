@@ -1,10 +1,10 @@
-from datetime import datetime
-from flask_login import UserMixin
-from app import db, app
 # COMMENT maybe
 import bcrypt
 # 3.2 Needed to generate encryption key
 from cryptography.fernet import Fernet
+from flask_login import UserMixin
+
+from app import db, app
 
 
 class User(db.Model, UserMixin):

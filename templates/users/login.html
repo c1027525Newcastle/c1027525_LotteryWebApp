@@ -1,9 +1,36 @@
 {% extends "base.html" %}
-
+<!-- COMMENT -->
 {% block content %}
-
-    <h3 class="title is-3">Login</h3>
-
-    <p>TODO</p>
-
+    <div class="column is-6 is-offset-3">
+        <h3 class="title is-3">Login</h3>
+        <div class="box">
+            <!-- Next lines are the Jinja code showing flash error from users\views.py-->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="notification is-danger">
+                        {{ messages[0] }}. Go to <a href="{{ url_for('users.register') }}">register page</a>
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <!-- -->
+            {% if form %}
+                <form method="POST">
+                    <div class="field">
+                        {{ form.csrf_token() }}
+                        <div class="control">
+                            {{ form.email_check(class="input", placeholder="Email") }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            {{ form.password_check(class="input", placeholder="Password") }}
+                        </div>
+                    </div>
+                    <div>
+                        {{ form.submit(class="button is-info is-centered") }}
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
