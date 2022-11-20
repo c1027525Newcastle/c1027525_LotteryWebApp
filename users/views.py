@@ -2,7 +2,7 @@
 import bcrypt
 import pyotp
 from flask import Blueprint, render_template, flash, redirect, url_for, session
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 from markupsafe import Markup
 
 from app import db
@@ -51,6 +51,10 @@ def register():
 # view user login
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+
+    :return:
+    """
     # 4 COMMENT
     form = LoginForm()
 
@@ -60,8 +64,8 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email_check.data).first()
         if not user \
-                or not bcrypt.checkpw(form.password_check.data.encode('utf-8'), user.password): #\
-                #or not pyotp.TOTP(user.pin_key).verify(form.pin.data): #Commented code for easier access when testing
+                or not bcrypt.checkpw(form.password_check.data.encode('utf-8'), user.password) \
+                or not pyotp.TOTP(user.pin_key).verify(form.pin.data):
             session['authentication_attempts'] += 1
             if session.get('authentication_attempts') == 3:
                 flash(Markup('Number of incorrect login attempts exceeded. Please click <a href="/reset">here</a> to '
@@ -89,12 +93,14 @@ def reset():
 
 # view user profile
 @users_blueprint.route('/profile')
+@login_required
 def profile():
     return render_template('users/profile.html', name="PLACEHOLDER FOR FIRSTNAME")
 
 
 # view user account
 @users_blueprint.route('/account')
+@login_required
 def account():
     return render_template('users/account.html',
                            acc_no="PLACEHOLDER FOR USER ID",
@@ -105,6 +111,11 @@ def account():
 
 
 @users_blueprint.route('/logout')
+@login_required
 def logout():
+    """
+    Logs out the user thus returning to current_user.is_anonymous
+    :return: renders the main/index.html
+    """
     logout_user()
     return render_template('main/index.html')
