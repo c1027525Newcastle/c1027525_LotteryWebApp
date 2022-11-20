@@ -2,7 +2,7 @@
 import bcrypt
 import pyotp
 from flask import Blueprint, render_template, flash, redirect, url_for, session
-from flask_login import login_user
+from flask_login import login_user, logout_user
 from markupsafe import Markup
 
 from app import db
@@ -70,6 +70,7 @@ def login():
             attempts_remaining = 3 - session.get('authentication_attempts')
             flash(f'Please check your login details and try again, {attempts_remaining} login attempts remaining')
             return render_template('users/login.html', form=form)
+        # Logs in the user
         login_user(user)
         return redirect(url_for('users.profile'))
     return render_template('users/login.html', form=form)
@@ -101,3 +102,9 @@ def account():
                            firstname="PLACEHOLDER FOR USER FIRSTNAME",
                            lastname="PLACEHOLDER FOR USER LASTNAME",
                            phone="PLACEHOLDER FOR USER PHONE")
+
+
+@users_blueprint.route('/logout')
+def logout():
+    logout_user()
+    return render_template('main/index.html')
