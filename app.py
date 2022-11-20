@@ -1,5 +1,7 @@
+from functools import wraps
+
 from flask import Flask, render_template
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 import os
 from dotenv import load_dotenv
@@ -19,6 +21,27 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = os.getenv('RECAPTCHA_PRIVATE_KEY')
 
 # initialise database
 db = SQLAlchemy(app)
+
+
+# Wrapper function
+def requires_roles(*roles):
+    """
+    This wrapper function will be added to the functions in lottery\views, admin\views and users\views to control what
+    the privileges or permissions of a role of a user will be
+    :param roles: The role or roles that have the permission to access said information or site
+    :return: if the user is anonymous or the role doesn't have permission it will render an error template
+    """
+    def wrapper(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            # Check if the user that is trying to reach the site is anonymous or is allowed
+            # if current_user.is_anonymous:
+                # return render_template('500.html'), 500
+            if current_user.is_anonymous or current_user.role not in roles:
+                return render_template('errors/403.html'), 403
+            return f(*args, **kwargs)
+        return wrapped
+    return wrapper
 
 
 # HOME PAGE VIEW

@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, session
 from flask_login import login_user, logout_user, login_required, current_user
 from markupsafe import Markup
 
-from app import db
+from app import db, requires_roles
 from models import User
 from users.forms import RegisterForm, LoginForm
 
@@ -95,15 +95,17 @@ def reset():
 
 
 # view user profile
-@users_blueprint.route('/profile')
 @login_required
+@users_blueprint.route('/profile')
+@requires_roles('user')
 def profile():
     return render_template('users/profile.html', name=current_user.firstname)
 
 
 # view user account
-@users_blueprint.route('/account')
 @login_required
+@users_blueprint.route('/account')
+@requires_roles('user', 'admin')
 def account():
     return render_template('users/account.html',
                            acc_no=current_user.id,
@@ -113,8 +115,8 @@ def account():
                            phone=current_user.phone)
 
 
-@users_blueprint.route('/logout')
 @login_required
+@users_blueprint.route('/logout')
 def logout():
     """
     Logs out the user thus returning to current_user.is_anonymous
