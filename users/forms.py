@@ -1,8 +1,5 @@
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, SubmitField, PasswordField
-"""
-The next 2 lines: Import the validators needed form wtforms and the functions that we build to validate data
-"""
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 from users.validation import excludes_character_check, contains_check, phone_format_check
 
@@ -25,4 +22,5 @@ class RegisterForm(FlaskForm):
 class LoginForm(FlaskForm):
     email_check = StringField(validators=[DataRequired()])
     password_check = PasswordField(validators=[DataRequired()])
+    recaptcha = RecaptchaField()
     submit = SubmitField()
