@@ -1,5 +1,6 @@
 # IMPORTS
 import bcrypt
+import pyotp
 from flask import Blueprint, render_template, flash, redirect, url_for
 
 from app import db
@@ -53,7 +54,8 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email_check.data).first()
         if not user \
-                or not bcrypt.checkpw(form.password_check.data.encode('utf-8'), user.password):
+                or not bcrypt.checkpw(form.password_check.data.encode('utf-8'), user.password) \
+                or not pyotp.TOTP(user.pin_key).verify(form.pin.data):
             flash('Please check your login details and try again')
             return render_template('users/login.html', form=form)
         return render_template('main/index.html')

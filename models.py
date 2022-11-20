@@ -1,5 +1,6 @@
 # COMMENT maybe
 import bcrypt
+import pyotp
 # 3.2 Needed to generate encryption key
 from cryptography.fernet import Fernet
 from flask_login import UserMixin
@@ -21,8 +22,12 @@ class User(db.Model, UserMixin):
     lastname = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(100), nullable=False, default='user')
-    # 3.2 COMMENT?
+
+    # Encryption key for the lottery draw
     lottery_draw_key = db.Column(db.BLOB, nullable=True)
+
+    # Pin key for the time based pin authentication
+    pin_key = db.Column(db.String(100), nullable=False) ###
 
     # Define the relationship to Draw
     draws = db.relationship('Draw')
@@ -32,11 +37,15 @@ class User(db.Model, UserMixin):
         self.firstname = firstname
         self.lastname = lastname
         self.phone = phone
-        # COMMENT Encrypt password
+        # Encrypt password
         self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
         self.role = role
-        # 3.2 Generate the encryption key for the draws of each user
+        # Generate the encryption key for the draws of each user
         self.lottery_draw_key = Fernet.generate_key()
+
+        # Generate the pin key
+        self.pin_key = pyotp.random_base32()
 
 
 class Draw(db.Model):
@@ -76,23 +85,21 @@ class Draw(db.Model):
         self.numbers = decrypt(self.numbers, draw_key)
 
 
-# 3.3 COMMENT
 def encrypt(data, draw_key):
     """
-
-    :param data:
-    :param draw_key:
+    Encrypt the draw that comes in with the draw_key given
+    :param data: The exact draw chosen
+    :param draw_key: Encryption key
     :return:
     """
     return Fernet(draw_key).encrypt(bytes(data, 'utf-8'))
 
 
-# 3.4 COMMENT
 def decrypt(data, draw_key):
     """
-
-    :param data:
-    :param draw_key:
+    Decrypts the draw that comes in with the draw_key given
+    :param data: The ciphertext that needs to be decrypted
+    :param draw_key: Encryption key with which the data was encrypted
     :return:
     """
     return Fernet(draw_key).decrypt(data).decode('utf-8')
