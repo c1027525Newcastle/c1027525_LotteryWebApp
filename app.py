@@ -26,8 +26,8 @@ db = SQLAlchemy(app)
 # Wrapper function
 def requires_roles(*roles):
     """
-    This wrapper function will be added to the functions in lottery\views, admin\views and users\views to control what
-    the privileges or permissions of a role of a user will be
+    This wrapper function will decorate the functions in lottery/views, admin/views and users/views to control what role
+    will have the permission to access different functions
     :param roles: The role or roles that have the permission to access said information or site
     :return: if the user is anonymous or the role doesn't have permission it will render an error template
     """
@@ -40,6 +40,21 @@ def requires_roles(*roles):
             return f(*args, **kwargs)
         return wrapped
     return wrapper
+
+
+def anonymous_only(f):
+    """
+    This wrapper function will decorate login and register functions in users/views to only allow anonymous users to
+    access those two function
+    :param f: function that is decorated
+    :return: if the user is not anonymous it will render an error template
+    """
+    @wraps(f)
+    def wrapped(*args, **kwargs):
+        if current_user.is_authenticated:
+            return render_template('errors/403.html'), 403
+        return f(*args, **kwargs)
+    return wrapped
 
 
 # HOME PAGE VIEW

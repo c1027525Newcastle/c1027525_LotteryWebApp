@@ -27,7 +27,7 @@ class User(db.Model, UserMixin):
     lottery_draw_key = db.Column(db.BLOB, nullable=True)
 
     # Pin key for the time based pin authentication
-    pin_key = db.Column(db.String(100), nullable=False) ###
+    pin_key = db.Column(db.String(100), nullable=False)
 
     # Define the relationship to Draw
     draws = db.relationship('Draw')
