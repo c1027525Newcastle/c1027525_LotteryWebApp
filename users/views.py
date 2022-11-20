@@ -95,16 +95,17 @@ def reset():
 
 
 # view user profile
-@login_required
+
 @users_blueprint.route('/profile')
+@login_required
 @requires_roles('user')
 def profile():
     return render_template('users/profile.html', name=current_user.firstname)
 
 
 # view user account
-@login_required
 @users_blueprint.route('/account')
+@login_required
 @requires_roles('user', 'admin')
 def account():
     return render_template('users/account.html',
@@ -115,8 +116,8 @@ def account():
                            phone=current_user.phone)
 
 
-@login_required
 @users_blueprint.route('/logout')
+@login_required
 def logout():
     """
     Logs out the user thus returning to current_user.is_anonymous

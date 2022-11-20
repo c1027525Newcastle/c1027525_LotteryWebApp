@@ -11,16 +11,16 @@ admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 
 # VIEWS
 # view admin homepage
-@login_required
 @admin_blueprint.route('/admin')
+@login_required
 @requires_roles('admin')
 def admin():
     return render_template('admin/admin.html', name=current_user.firstname) ### 5
 
 
 # view all registered users
-@login_required
 @admin_blueprint.route('/view_all_users', methods=['POST'])
+@login_required
 @requires_roles('admin')
 def view_all_users():
     current_users = User.query.filter_by(role='user').all()
@@ -29,8 +29,8 @@ def view_all_users():
 
 
 # create a new winning draw
-@login_required
 @admin_blueprint.route('/create_winning_draw', methods=['POST'])
+@login_required
 @requires_roles('admin')
 def create_winning_draw():
 
@@ -67,8 +67,8 @@ def create_winning_draw():
 
 
 # view current winning draw
-@login_required
 @admin_blueprint.route('/view_winning_draw', methods=['POST'])
+@login_required
 @requires_roles('admin')
 def view_winning_draw():
 
@@ -86,8 +86,8 @@ def view_winning_draw():
 
 
 # view lottery results and winners
-@login_required
 @admin_blueprint.route('/run_lottery', methods=['POST'])
+@login_required
 @requires_roles('admin')
 def run_lottery():
 
@@ -150,8 +150,8 @@ def run_lottery():
 
 
 # view last 10 log entries
-@login_required
 @admin_blueprint.route('/logs', methods=['POST'])
+@login_required
 @requires_roles('admin')
 def logs():
     with open("lottery.log", "r") as f:

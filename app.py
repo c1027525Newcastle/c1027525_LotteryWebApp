@@ -35,8 +35,6 @@ def requires_roles(*roles):
         @wraps(f)
         def wrapped(*args, **kwargs):
             # Check if the user that is trying to reach the site is anonymous or is allowed
-            # if current_user.is_anonymous:
-                # return render_template('500.html'), 500
             if current_user.is_anonymous or current_user.role not in roles:
                 return render_template('errors/403.html'), 403
             return f(*args, **kwargs)

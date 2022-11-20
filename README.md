@@ -4,10 +4,8 @@
 >> COMMENT = need to comment the thing
 
 > TODO:
->> 3.2 Need to know how to have the draws encrypted by their
-> respective user lottery_draws_key (models.py) (Also did some
-> work in lottery/views.py) Actually need to make a function that
-> somehow finds out what user is logged in!!!
+>> Making logged in users not be able to access pages only meant for
+> anonymous users
 
 > Questions:
 > 
@@ -18,7 +16,7 @@
 >
 >> Need to comment imports? Nope
 >
->> Task 3.2 
+>> 
 > 
 >> Should also encrypt the winning draw? YES
 > 
