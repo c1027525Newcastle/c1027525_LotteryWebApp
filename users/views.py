@@ -1,4 +1,6 @@
 # IMPORTS
+from datetime import datetime
+
 import bcrypt
 import pyotp
 from flask import Blueprint, render_template, flash, redirect, url_for, session
@@ -73,11 +75,21 @@ def login():
                 flash(Markup('Number of incorrect login attempts exceeded. Please click <a href="/reset">here</a> to '
                              'reset'))
                 return render_template('users/login.html')
+
             attempts_remaining = 3 - session.get('authentication_attempts')
             flash(f'Please check your login details and try again, {attempts_remaining} login attempts remaining')
             return render_template('users/login.html', form=form)
         # Logs in the user
         login_user(user)
+
+        # Update the last_login with the last login that happened aka current_login
+        user.last_login = user.current_login
+        # Update current_login with the date and time at the moment the user logs in
+        user.current_login = datetime.now()
+        db.session.add(user)
+        db.session.commit()
+
+        # Check the role of the user and redirect him/her to the appropriate link
         if current_user.role == 'user':
             return redirect(url_for('users.profile'))
         elif current_user.role == 'admin':

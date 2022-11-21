@@ -31,12 +31,12 @@ def requires_roles(*roles):
     This wrapper function will decorate the functions in lottery/views, admin/views and users/views to control what role
     will have the permission to access different functions
     :param roles: The role or roles that have the permission to access said information or site
-    :return: if the user is anonymous or the role doesn't have permission it will render an error template
+    :return: if the role of the user doesn't have permission to the page it will render an error template
     """
     def wrapper(f):
         @wraps(f)
         def wrapped(*args, **kwargs):
-            # Check if the user that is trying to reach the site is anonymous or is allowed
+            # Check if the user that is trying to reach the site is allowed
             if current_user.role not in roles:
                 return render_template('errors/403.html'), 403
             return f(*args, **kwargs)
