@@ -62,6 +62,7 @@ def login():
     # 4 COMMENT
     form = LoginForm()
 
+    # Checks if the authentication_attempts exists and creates it if not
     if not session.get('authentication_attempts'):
         session['authentication_attempts'] = 0
 
@@ -97,6 +98,7 @@ def login():
     return render_template('users/login.html', form=form)
 
 
+# view reset
 @users_blueprint.route('/reset')
 def reset():
     """
@@ -109,7 +111,6 @@ def reset():
 
 
 # view user profile
-
 @users_blueprint.route('/profile')
 @login_required
 @requires_roles('user')
@@ -130,6 +131,7 @@ def account():
                            phone=current_user.phone)
 
 
+# view logout
 @users_blueprint.route('/logout')
 @login_required
 def logout():

@@ -1,6 +1,6 @@
 # IMPORTS
 from flask import Blueprint, render_template, request, flash
-from flask_login import login_required
+from flask_login import login_required, current_user
 from sqlalchemy.orm import make_transient
 
 from app import db, requires_roles
@@ -28,17 +28,8 @@ def add_draw():
         submitted_draw += request.form.get('no' + str(i + 1)) + ' '
     submitted_draw.strip()
 
-    # 3.3 Checking for the user and getting his respective draw_key
-    # 3.3 Need  to know how to know what user is logged so going to need some code
-    # 3.3 Until then just keep this line id_user = 1, so we get the admin draw_key
-    id_user = 1
-    user = User.query.filter_by(id=id_user).first()
-    # 3.3 Might want to do an #if user: and do something else if user not in Draw()
-    draw_key = user.lottery_draw_key
-
-    # create a new draw with the form data.
-    # 3.3 Added the draw_key as one of the parameters
-    new_draw = Draw(user_id=1, numbers=submitted_draw, master_draw=False, lottery_round=0, draw_key=draw_key)  # TODO: update user_id [user_id=1 is a placeholder]
+    new_draw = Draw(user_id=current_user.id, numbers=submitted_draw, master_draw=False, lottery_round=0,
+                    draw_key=current_user.lottery_draw_key)
 
     # add the new draw to the database
     db.session.add(new_draw)
@@ -54,21 +45,14 @@ def add_draw():
 @login_required
 @requires_roles('user')
 def view_draws():
-    # get all draws that have not been played [played=0]
-    playable_draws = Draw.query.filter_by(been_played=False).all()  # TODO: filter playable draws for current user
-    ## current_user.user_id
+    # get all draws that have not been played [played=0] and that have the user_id the same as the user logged in
+    playable_draws = Draw.query.filter_by(user_id=current_user.id, been_played=False).all()
     # if playable draws exist
     if len(playable_draws) != 0:
-        # 3.4 COMMENT Same as above need to change this id_user way to a function that gets you the user id and prob
-        # an if if it doesn't
-        id_user = 1  ## DELETE
-        user = User.query.filter_by(id=id_user).first()  ## current_user.id
-        draw_key = user.lottery_draw_key  ## DELETE
+        # Decrypt each draw in playable_draw
         for playable_draw in playable_draws:
             make_transient(playable_draw)
-            playable_draw.view_lottery_draw(draw_key=draw_key)  ## current_user.lottery_draw_key
-        #
-
+            playable_draw.view_lottery_draw(draw_key=current_user.lottery_draw_key)
         # re-render lottery page with playable draws
         return render_template('lottery/lottery.html', playable_draws=playable_draws)
     else:
