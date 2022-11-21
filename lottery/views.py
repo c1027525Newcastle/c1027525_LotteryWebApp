@@ -47,6 +47,7 @@ def add_draw():
 def view_draws():
     # get all draws that have not been played [played=0] and that have the user_id the same as the user logged in
     playable_draws = Draw.query.filter_by(user_id=current_user.id, been_played=False).all()
+
     # if playable draws exist
     if len(playable_draws) != 0:
         # Decrypt each draw in playable_draw
@@ -65,11 +66,16 @@ def view_draws():
 @login_required
 @requires_roles('user')
 def check_draws():
-    # get played draws
-    played_draws = Draw.query.filter_by(been_played=True).all()  # TODO: filter played draws for current user
+    # get played draws by searching for the user id that matches the logged user
+    played_draws = Draw.query.filter_by(user_id=current_user.id, been_played=True).all()
 
     # if played draws exist
     if len(played_draws) != 0:
+        # Decrypt each draw in played_draw
+        for played_draw in played_draws:
+            make_transient(played_draw)
+            played_draw.view_lottery_draw(draw_key=current_user.lottery_draw_key)
+        # re-render lottery page with played draws
         return render_template('lottery/lottery.html', results=played_draws, played=True)
 
     # if no played draws exist [all draw entries have been played therefore wait for next lottery round]
@@ -83,7 +89,8 @@ def check_draws():
 @login_required
 @requires_roles('user')
 def play_again():
-    Draw.query.filter_by(been_played=True, master_draw=False).delete(synchronize_session=False)
+    # Delete played draws by the user id of the logged user
+    Draw.query.filter_by(user_id=current_user.id, been_played=True, master_draw=False).delete(synchronize_session=False)
     db.session.commit()
 
     flash("All played draws deleted.")
