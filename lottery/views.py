@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from sqlalchemy.orm import make_transient
 
 from app import db, requires_roles
-from models import User, Draw
+from models import Draw
 
 # CONFIG
 lottery_blueprint = Blueprint('lottery', __name__, template_folder='templates')
