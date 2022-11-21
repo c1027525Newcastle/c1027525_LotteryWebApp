@@ -1,10 +1,12 @@
+# IMPORTS
+import os
 from functools import wraps
 
+from dotenv import load_dotenv
 from flask import Flask, render_template
 from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
-import os
-from dotenv import load_dotenv
+
 load_dotenv()
 
 # CONFIG
@@ -35,7 +37,7 @@ def requires_roles(*roles):
         @wraps(f)
         def wrapped(*args, **kwargs):
             # Check if the user that is trying to reach the site is anonymous or is allowed
-            if current_user.is_anonymous or current_user.role not in roles:
+            if current_user.role not in roles:
                 return render_template('errors/403.html'), 403
             return f(*args, **kwargs)
         return wrapped
@@ -68,8 +70,8 @@ def index():
 from users.views import users_blueprint
 from admin.views import admin_blueprint
 from lottery.views import lottery_blueprint
-#
-# # register blueprints with app
+
+# register blueprints with app
 app.register_blueprint(users_blueprint)
 app.register_blueprint(admin_blueprint)
 app.register_blueprint(lottery_blueprint)

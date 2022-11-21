@@ -56,17 +56,17 @@ def add_draw():
 def view_draws():
     # get all draws that have not been played [played=0]
     playable_draws = Draw.query.filter_by(been_played=False).all()  # TODO: filter playable draws for current user
-
+    ## current_user.user_id
     # if playable draws exist
     if len(playable_draws) != 0:
         # 3.4 COMMENT Same as above need to change this id_user way to a function that gets you the user id and prob
         # an if if it doesn't
-        id_user = 1
-        user = User.query.filter_by(id=id_user).first()
-        draw_key = user.lottery_draw_key
+        id_user = 1  ## DELETE
+        user = User.query.filter_by(id=id_user).first()  ## current_user.id
+        draw_key = user.lottery_draw_key  ## DELETE
         for playable_draw in playable_draws:
             make_transient(playable_draw)
-            playable_draw.view_lottery_draw(draw_key=draw_key)
+            playable_draw.view_lottery_draw(draw_key=draw_key)  ## current_user.lottery_draw_key
         #
 
         # re-render lottery page with playable draws
