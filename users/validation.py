@@ -23,7 +23,7 @@ def excludes_character_check(form, name_field):
 
     # If not_allowed_chars is not empty it means that there are excluded characters in the name_field so raise error
     if not_allowed_chars != "":
-        raise ValidationError(f"Character {not_allowed_chars} is not allowed")
+        raise ValidationError(f"Character/s {not_allowed_chars} is/are not allowed")
 
 
 def contains_check(form, data_field):

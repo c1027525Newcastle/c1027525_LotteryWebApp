@@ -16,7 +16,7 @@
                     {{ form.csrf_token() }}
                     <div class="control">
                         {{ form.email(class="input", placeholder="Email") }}
-                        <!-- next 3 lines show an error message if email failed validation-->
+                        {# next 3 lines show an error message if email failed validation #}
                         {% for error in form.email.errors %}
                             {{ error }}
                         {% endfor %}
@@ -25,7 +25,7 @@
                 <div class="field">
                     <div class="control">
                         {{ form.firstname(class="input", placeholder="First Name") }}
-                        <!-- next 3 lines show an error message if firstname failed validation-->
+                        {# next 3 lines show an error message if firstname failed validation #}
                         {% for error in form.firstname.errors %}
                             {{ error }}
                         {% endfor %}
@@ -34,7 +34,7 @@
                 <div class="field">
                     <div class="control">
                         {{ form.lastname(class="input", placeholder="Last Name") }}
-                        <!-- next 3 lines show an error message if lastname failed validation-->
+                        {# next 3 lines show an error message if lastname failed validation #}
                         {% for error in form.lastname.errors %}
                             {{ error }}
                         {% endfor %}
@@ -43,7 +43,7 @@
                 <div class="field">
                     <div class="control">
                         {{ form.phone(class="input", placeholder="Phone") }}
-                        <!-- next 3 lines show an error message if phone failed validation-->
+                        {# next 3 lines show an error message if phone failed validation #}
                         {% for error in form.phone.errors %}
                             {{ error }}
                         {% endfor %}
@@ -52,7 +52,7 @@
                 <div class="field">
                     <div class="control">
                         {{ form.password(class="input", placeholder="Password") }}
-                        <!-- next 3 lines show an error message if password failed validation-->
+                        {# next 3 lines show an error message if password failed validation #}
                         {% for error in form.password.errors %}
                             {{ error }}
                         {% endfor %}
@@ -61,7 +61,7 @@
                 <div class="field">
                     <div class="control">
                         {{ form.confirm_password(class="input", placeholder="Confirm Password") }}
-                        <!-- next 3 lines show an error message if confirm_password was not identical to password-->
+                        {# next 3 lines show an error message if the confirm_password was not identical to password #}
                         {% for error in form.confirm_password.errors %}
                             {{ error }}
                         {% endfor %}

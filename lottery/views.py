@@ -1,9 +1,11 @@
 # IMPORTS
+import flask
 from flask import Blueprint, render_template, request, flash
 from flask_login import login_required, current_user
 from sqlalchemy.orm import make_transient
 
 from app import db, requires_roles
+from lottery.validation import check_draw
 from models import Draw
 
 # CONFIG
@@ -25,7 +27,14 @@ def lottery():
 def add_draw():
     submitted_draw = ''
     for i in range(6):
-        submitted_draw += request.form.get('no' + str(i + 1)) + ' '
+        # Checks if the number was entered and is valid
+        check_draw(request.form.get('no' + str(i + 1)) + ' ') # Need to check if any flash exists and lottery()
+        submitted_draw += request.form.get('no' + str(i + 1)) + ' ' # FOR THE LOVE OF GOD WHAT IS THIS LINE
+
+    # Checks if any flash massages appeared from the check_draw function and
+    if flask.get_flashed_messages():
+        return lottery()
+
     submitted_draw.strip()
 
     new_draw = Draw(user_id=current_user.id, numbers=submitted_draw, master_draw=False, lottery_round=0,
