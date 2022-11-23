@@ -4,7 +4,7 @@ import os
 from functools import wraps
 
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 
@@ -66,6 +66,9 @@ def requires_roles(*roles):
         def wrapped(*args, **kwargs):
             # Check if the user that is trying to reach the site is allowed
             if current_user.role not in roles:
+                # Add logging statement as log record to the log file
+                logging.warning(f'Security - Unauthorised Access Attempt [{current_user.id}, {current_user.email}, '
+                                f'{current_user.role}, {request.remote_addr}]')
                 return render_template('errors/403.html'), 403
             return f(*args, **kwargs)
         return wrapped

@@ -83,6 +83,10 @@ def login():
 
             attempts_remaining = 3 - session.get('authentication_attempts')
             flash(f'Please check your login details and try again, {attempts_remaining} login attempts remaining')
+
+            # Add logging statement as log record to the log file
+            logging.warning(f'Security - Invalid Log In Attempt [{form.email_check.data}, {request.remote_addr}]')
+
             return render_template('users/login.html', form=form)
         # Logs in the user
         login_user(user)
@@ -93,6 +97,9 @@ def login():
         user.current_login = datetime.now()
         db.session.add(user)
         db.session.commit()
+
+        # Add logging statement as log record to the log file
+        logging.warning(f'Security - Log in [{user.id}, {user.email}, {request.remote_addr}]')
 
         # Check the role of the user and redirect him/her to the appropriate link
         if current_user.role == 'user':
@@ -143,5 +150,8 @@ def logout():
     Logs out the user thus returning to current_user.is_anonymous
     :return: renders the main/index.html
     """
+    # Add logging statement as log record to the log file
+    logging.warning(f'Security - Log out [{current_user.id}, {current_user.email}, {request.remote_addr}]')
+
     logout_user()
     return render_template('main/index.html')
