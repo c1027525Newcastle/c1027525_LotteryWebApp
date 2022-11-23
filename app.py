@@ -1,4 +1,5 @@
 # IMPORTS
+import logging
 import os
 from functools import wraps
 
@@ -8,6 +9,33 @@ from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv()
+
+
+# Filter class
+class SecurityFilter(logging.Filter):
+    def filter(self, record):
+        """
+        Filters through all the log records that enter the function
+        :param record: log record
+        :return: log records that include the String 'Security'
+        """
+        return 'Security' in record.getMessage()
+
+
+# Get the root logger
+logger = logging.getLogger()
+# Creates a file handler
+file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'blog.log'), 'a')
+# Set the level of the file handler
+file_handler.setLevel(logging.WARNING)
+# Add the filter to the file handler
+file_handler.addFilter(SecurityFilter())
+# Create a formatter
+formatter = logging.Formatter('%(asctime)s : %(message)s', '%m/%d/%Y %I:%M:%S %p')
+# Add the formatter to the file handler
+file_handler.setFormatter(formatter)
+# Add the file_handler to the root logger
+logger.addHandler(file_handler)
 
 # CONFIG
 # COMMENT on .env

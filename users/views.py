@@ -1,9 +1,10 @@
 # IMPORTS
+import logging
 from datetime import datetime
 
 import bcrypt
 import pyotp
-from flask import Blueprint, render_template, flash, redirect, url_for, session
+from flask import Blueprint, render_template, flash, redirect, url_for, session, request
 from flask_login import login_user, logout_user, login_required, current_user
 from markupsafe import Markup
 
@@ -44,6 +45,9 @@ def register():
         # add the new user to the database
         db.session.add(new_user)
         db.session.commit()
+
+        # Add logging statement as log record to the log file
+        logging.warning(f'Security - User registration [{form.email.data}, {request.remote_addr}]')
 
         # sends user to login page
         return redirect(url_for('users.login'))
