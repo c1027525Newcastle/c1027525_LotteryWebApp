@@ -11,3 +11,4 @@
 11/23/2022 05:13:56 PM : Security - Log in [1, admin@email.com, 127.0.0.1]
 11/23/2022 05:14:01 PM : Security - Unauthorised Access Attempt [1, admin@email.com, admin, 127.0.0.1]
 11/23/2022 05:14:10 PM : Security - Log out [1, admin@email.com, 127.0.0.1]
+11/23/2022 05:36:59 PM : Security - Log in [1, admin@email.com, 127.0.0.1]
