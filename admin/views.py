@@ -76,12 +76,12 @@ def view_winning_draw():
     # get winning draw from DB
     current_winning_draw = Draw.query.filter_by(master_draw=True, been_played=False).first()
 
-    # Decrypt the current_winning_draw
-    make_transient(current_winning_draw)
-    current_winning_draw.view_lottery_draw(draw_key=current_user.lottery_draw_key)
 
     # if a winning draw exists
     if current_winning_draw:
+        # Decrypt the current_winning_draw
+        make_transient(current_winning_draw)
+        current_winning_draw.view_lottery_draw(draw_key=current_user.lottery_draw_key)
         # re-render admin page with current winning draw and lottery round
         return render_template('admin/admin.html', winning_draw=current_winning_draw, name=current_user.firstname)
 
