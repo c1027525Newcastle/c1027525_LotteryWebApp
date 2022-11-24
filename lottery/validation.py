@@ -5,7 +5,7 @@ from flask import flash
 
 def check_draw(draw_number):
     """
-    Checks if the draw was entered and is between 1 and 60 and if not flashes
+    Checks if the draw_number was entered and is between 1 and 60 and if not flashes
     an appropriate error message and returns True
     :param draw_number: number
     :return: True
