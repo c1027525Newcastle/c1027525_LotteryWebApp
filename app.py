@@ -25,7 +25,7 @@ class SecurityFilter(logging.Filter):
 # Get the root logger
 logger = logging.getLogger()
 # Creates a file handler
-file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'blog.log'), 'a')
+file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'lottery.log'), 'a')
 # Set the level of the file handler
 file_handler.setLevel(logging.WARNING)
 # Add the filter to the file handler
