@@ -4,6 +4,7 @@ from flask_login import current_user, login_required
 from sqlalchemy.orm import make_transient
 
 from app import db, requires_roles
+from lottery.validation import check_draw
 from models import User, Draw
 
 # CONFIG
@@ -51,6 +52,11 @@ def create_winning_draw():
     # get new winning draw entered in form
     submitted_draw = ''
     for i in range(6):
+        # Checks if the number was entered and is valid
+        check_if_error = check_draw(request.form.get('no' + str(i + 1)))
+        # Checks if any flash massages appeared from the check_draw function
+        if check_if_error:
+            return admin()
         submitted_draw += request.form.get('no' + str(i + 1)) + ' '
     # remove any surrounding whitespace
     submitted_draw.strip()
@@ -75,7 +81,6 @@ def create_winning_draw():
 def view_winning_draw():
     # get winning draw from DB
     current_winning_draw = Draw.query.filter_by(master_draw=True, been_played=False).first()
-
 
     # if a winning draw exists
     if current_winning_draw:
