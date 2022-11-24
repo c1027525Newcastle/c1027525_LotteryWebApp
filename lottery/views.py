@@ -26,22 +26,14 @@ def lottery():
 @requires_roles('user')
 def add_draw():
     submitted_draw = ''
-    #
-    #check_if_error = False
-    p = re.compile(r'(^[0-9]$)|(^[1-5][0-9]$)|(60)')
     for i in range(6):
-        if not p.match(request.form.get('no' + str(i+1))):
-            flash('Each number must be between 1 and 60')
-            return lottery()
         # Checks if the number was entered and is valid
-        #check_draw(check=check_if_error, draw_number=request.form.get('no' + str(i+1))) # Need to check if any flash exists and lottery()
+        check_if_error = check_draw(request.form.get('no' + str(i + 1)))
+        # Checks if any flash massages appeared from the check_draw function
+        if check_if_error:
+            return lottery()
+
         submitted_draw += request.form.get('no' + str(i + 1)) + ' '
-
-    # Checks if any flash massages appeared from the check_draw function
-    #print('\n\nCHECK IF ERROR:', check_if_error, '\n')
-    #if check_if_error:
-        #return lottery()
-
     submitted_draw.strip()
 
     new_draw = Draw(user_id=current_user.id, numbers=submitted_draw, master_draw=False, lottery_round=0,
