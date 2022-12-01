@@ -1,9 +1,8 @@
 # IMPORTS
-import flask
 from flask import Blueprint, render_template, request, flash
 from flask_login import login_required, current_user
 from sqlalchemy.orm import make_transient
-import re
+
 from app import db, requires_roles
 from lottery.validation import check_draw
 from models import Draw
@@ -28,10 +27,10 @@ def add_draw():
     submitted_draw = ''
     for i in range(6):
         # Checks if the number was entered and is valid
-        check_if_error = check_draw(request.form.get('no' + str(i + 1)))
+        #check_if_error = check_draw(request.form.get('no' + str(i + 1)))
         # Checks if any flash massages appeared from the check_draw function
-        if check_if_error:
-            return lottery()
+        #if check_if_error:
+            #return lottery()
 
         submitted_draw += request.form.get('no' + str(i + 1)) + ' '
     submitted_draw.strip()
