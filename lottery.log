@@ -14,3 +14,8 @@
 11/29/2022 03:13:07 PM : Security - Log in [2, luca@gmail.com, 127.0.0.1]
 11/29/2022 06:46:57 PM : Security - Log in [3, fairy@gmail.com, 127.0.0.1]
 12/01/2022 11:33:41 AM : Security - Log in [3, fairy@gmail.com, 127.0.0.1]
+12/06/2022 06:40:21 PM : Security - Log in [2, luca@gmail.com, 127.0.0.1]
+12/06/2022 06:41:08 PM : Security - Log out [2, luca@gmail.com, 127.0.0.1]
+12/06/2022 08:18:24 PM : Security - Log in [2, luca@gmail.com, 127.0.0.1]
+12/06/2022 08:20:06 PM : Security - Log out [2, luca@gmail.com, 127.0.0.1]
+12/06/2022 08:20:23 PM : Security - Log in [2, luca@gmail.com, 127.0.0.1]
