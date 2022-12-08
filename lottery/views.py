@@ -4,7 +4,6 @@ from flask_login import login_required, current_user
 from sqlalchemy.orm import make_transient
 
 from app import db, requires_roles
-from lottery.validation import check_draw
 from models import Draw
 
 # CONFIG
@@ -26,12 +25,6 @@ def lottery():
 def add_draw():
     submitted_draw = ''
     for i in range(6):
-        # Checks if the number was entered and is valid
-        #check_if_error = check_draw(request.form.get('no' + str(i + 1)))
-        # Checks if any flash massages appeared from the check_draw function
-        #if check_if_error:
-            #return lottery()
-
         submitted_draw += request.form.get('no' + str(i + 1)) + ' '
     submitted_draw.strip()
 
