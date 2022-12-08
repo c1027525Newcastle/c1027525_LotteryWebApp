@@ -35,3 +35,4 @@
 12/08/2022 12:18:00 PM : Security - Log out [1, admin@email.com, 127.0.0.1]
 12/08/2022 12:18:15 PM : Security - Log in [2, luca@gmail.com, 127.0.0.1]
 12/08/2022 12:18:42 PM : Security - Log out [2, luca@gmail.com, 127.0.0.1]
+12/08/2022 12:25:39 PM : Security - Log in [2, luca@gmail.com, 127.0.0.1]
