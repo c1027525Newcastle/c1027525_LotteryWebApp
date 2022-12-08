@@ -27,13 +27,9 @@ class SecurityFilter(logging.Filter):
 logger = logging.getLogger()
 # Creates a file handler
 file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__), 'lottery.log'), 'a')
-# Set the level of the file handler
 file_handler.setLevel(logging.WARNING)
-# Add the filter to the file handler
 file_handler.addFilter(SecurityFilter())
-# Create a formatter
 formatter = logging.Formatter('%(asctime)s : %(message)s', '%m/%d/%Y %I:%M:%S %p')
-# Add the formatter to the file handler
 file_handler.setFormatter(formatter)
 # Add the file_handler to the root logger
 logger.addHandler(file_handler)
