@@ -11,7 +11,6 @@ admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 
 
 # VIEWS
-# view admin homepage
 @admin_blueprint.route('/admin')
 @login_required
 @requires_roles('admin')
@@ -115,29 +114,42 @@ def run_lottery():
 
             # for each unplayed user draw
             for draw in user_draws:
-
+                draw_copy = draw###
                 # get the owning user (instance/object)
                 user = User.query.filter_by(id=draw.user_id).first()
 
+                # Decrypt the user draws and master draw####
+                make_transient(draw)
+                draw.view_lottery_draw(draw_key=user.lottery_draw_key)
+
+                make_transient(current_winning_draw)
+                current_winning_draw.view_lottery_draw(draw_key=current_user.lottery_draw_key)
+                print(f"\n\n1 DRAW NUMBERS: {draw.numbers}\n\n")#########
+                print(f'\n\n1 ADMIN NUMBERS: {current_winning_draw.numbers}\n\n')
                 # if user draw matches current unplayed winning draw
                 if draw.numbers == current_winning_draw.numbers:
 
                     # add details of winner to list of results
                     results.append((current_winning_draw.lottery_round, draw.numbers, draw.user_id, user.email))
-
+                    print(f'\n\n5: {results}\n\n')
                     # update draw as a winning draw (this will be used to highlight winning draws in the user's
                     # lottery page)
-                    draw.matches_master = True
+                    draw_copy.matches_master = True#draw
+                    ###
+                    db.session.add(draw_copy)
+                    db.session.commit()
 
                 # update draw as played
-                draw.been_played = True
+                draw_copy.been_played = True#draw
+                print(f"\n\n2: {draw}\n\n")##########
 
                 # update draw with current lottery round
-                draw.lottery_round = current_winning_draw.lottery_round
-
+                draw_copy.lottery_round = current_winning_draw.lottery_round#draw
+                print(f'\n\n3: {draw}\n\n')############
                 # commit draw changes to DB
-                db.session.add(draw)
+                db.session.add(draw_copy)#draw
                 db.session.commit()
+                print(f'\n\n4: {draw}\n\n')##########
 
             # if no winners
             if len(results) == 0:
@@ -153,11 +165,14 @@ def run_lottery():
     return admin()
 
 
-# view last 10 log entries
 @admin_blueprint.route('/logs', methods=['POST'])
 @login_required
 @requires_roles('admin')
 def logs():
+    """
+    View last 10 log entries
+    :return: the admin page with the logs rendered
+    """
     with open("lottery.log", "r") as f:
         content = f.read().splitlines()[-10:]
         content.reverse()

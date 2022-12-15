@@ -4,15 +4,16 @@ function luckyDip() {
     // create empty set
     let draw = new Set();
 
-    // COMMENT
+    // create empty arrays for int and float
     let randomBuffer = new Uint32Array(6);
     let randomBufferFloat = new Float32Array(6);
+    //populater the int array
     window.crypto.getRandomValues(randomBuffer);
 
+    // make all nums in the int array be a percentage
     for (let i = 0; i < randomBuffer.length; i++){
         randomBufferFloat[i] = randomBuffer[i] / (0xFFFFFFFF);
     }
-    //
 
     let min;
     let max;
@@ -20,12 +21,12 @@ function luckyDip() {
     let count = 0;
     // while set does not contain 6 values, create a random value between 1 and 60
     while (draw.size < 6) {
-        // COMMENT
         let csRandomNumber = randomBufferFloat[count];
         min = Math.ceil(1);
         max = Math.floor(60);
         value = Math.floor(csRandomNumber * (max - min + 1) + min);
-        // Check is value is already in draw and make a new cryptographic secure one
+
+        // Check is value is already in draw and make a new cryptographic secure one if yes
         while (draw.has(value)) {
             let newRandomBuffer = new Uint32Array(1);
             window.crypto.getRandomValues(newRandomBuffer);

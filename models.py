@@ -1,9 +1,7 @@
-# COMMENT maybe
 from datetime import datetime
 
 import bcrypt
 import pyotp
-# 3.2 Needed to generate encryption key
 from cryptography.fernet import Fernet
 from flask_login import UserMixin
 
@@ -86,7 +84,6 @@ class Draw(db.Model):
     # Lottery round that draw is used
     lottery_round = db.Column(db.Integer, nullable=False, default=0)
 
-    # 3.3 Added the draw_key to parameters
     def __init__(self, user_id, numbers, master_draw, lottery_round, draw_key):
         self.user_id = user_id
         self.numbers = encrypt(numbers, draw_key)
@@ -95,8 +92,12 @@ class Draw(db.Model):
         self.master_draw = master_draw
         self.lottery_round = lottery_round
 
-    # 3.4 COMMENT
     def view_lottery_draw(self, draw_key):
+        """
+        Calls another function to decrypt the draw
+        :param draw_key: Key of the corresponding user to the draw
+        :return: Nothing
+        """
         self.numbers = decrypt(self.numbers, draw_key)
 
 
@@ -105,7 +106,7 @@ def encrypt(data, draw_key):
     Encrypt the draw that comes in with the draw_key given
     :param data: The exact draw chosen
     :param draw_key: Encryption key
-    :return:
+    :return: Draw encrypted
     """
     return Fernet(draw_key).encrypt(bytes(data, 'utf-8'))
 
@@ -115,7 +116,7 @@ def decrypt(data, draw_key):
     Decrypts the draw that comes in with the draw_key given
     :param data: The ciphertext that needs to be decrypted
     :param draw_key: Encryption key with which the data was encrypted
-    :return:
+    :return: Draw decrypted
     """
     return Fernet(draw_key).decrypt(data).decode('utf-8')
 

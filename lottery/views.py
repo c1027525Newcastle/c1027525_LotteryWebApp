@@ -11,7 +11,6 @@ lottery_blueprint = Blueprint('lottery', __name__, template_folder='templates')
 
 
 # VIEWS
-# view lottery page
 @lottery_blueprint.route('/lottery')
 @login_required
 @requires_roles('user')

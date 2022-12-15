@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-<!-- COMMENT -->
+
 {% block content %}
     <div class="column is-6 is-offset-3">
         <h3 class="title is-3">Login</h3>
         <div class="box">
-            <!-- Next lines are the Jinja code showing flash error from users\views.py-->
+            {# Next lines are the Jinja code showing flash error from users\views.py #}
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     <div class="notification is-danger">
@@ -12,7 +12,6 @@
                     </div>
                 {% endif %}
             {% endwith %}
-            <!-- -->
             {% if form %}
                 <form method="POST">
                     <div class="field">

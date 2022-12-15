@@ -7,7 +7,7 @@ email_validator
 python-dotenv~=0.21.0
 bcrypt~=4.0.1
 cryptography==38.0.4
-SQLAlchemy==1.4.44
-pyotp~=2.7.0
+SQLAlchemy==1.4.45
+pyotp==2.8.0
 MarkupSafe~=2.1.1
 Flask-Talisman

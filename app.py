@@ -35,21 +35,21 @@ file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
 # CONFIG
-# COMMENT on .env
+# everything is stored in the .env file for more security
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_ECHO'] = os.getenv('SQLALCHEMY_ECHO') == 'True'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS') == 'True'
 
-# COMMENT
+# reCAPTCHA CONFIG
 app.config['RECAPTCHA_PUBLIC_KEY'] = os.getenv('RECAPTCHA_PUBLIC_KEY')
 app.config['RECAPTCHA_PRIVATE_KEY'] = os.getenv('RECAPTCHA_PRIVATE_KEY')
 
 # initialise database
 db = SQLAlchemy(app)
 
-# COMMENT
+# custom Content Security Policy
 csp = {
     'default-src': ['\'self\'',
                     'https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css'],
@@ -61,11 +61,10 @@ csp = {
                    'https://www.google.com/recaptcha/',
                    'https://www.gstatic.com/recaptcha/']
 }
-# COMMENT
+# implements security headers
 talisman = Talisman(app, content_security_policy=csp)
 
 
-# Wrapper function
 def requires_roles(*roles):
     """
     This wrapper function will decorate the functions in lottery/views, admin/views and users/views to control what role
@@ -119,7 +118,8 @@ app.register_blueprint(users_blueprint)
 app.register_blueprint(admin_blueprint)
 app.register_blueprint(lottery_blueprint)
 
-# COMMENT
+
+# set up login manager
 login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.init_app(app)
@@ -130,7 +130,6 @@ from models import User
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
-###
 
 
 # Error 400 view

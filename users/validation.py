@@ -39,7 +39,7 @@ def contains_check(form, data_field):
     # Checks if data_field does not match the pattern of p and raises the error
     if not p.match(data_field.data):
         raise ValidationError("Password need at least 1 digit, 1 lowercase and uppercase character and 1 special "
-                              "character e.g. !?%")
+                              "character e.g. !?% and it can be between 6 and 12 characters")
 
 
 def phone_format_check(form, phone_field):
