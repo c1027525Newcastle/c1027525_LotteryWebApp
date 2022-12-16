@@ -93,7 +93,6 @@ def view_winning_draw():
 @login_required
 @requires_roles('admin')
 def run_lottery():
-
     # get current unplayed winning draw
     current_winning_draw = Draw.query.filter_by(master_draw=True, been_played=False).first()
 
@@ -102,6 +101,7 @@ def run_lottery():
 
         # get all unplayed user draws
         user_draws = Draw.query.filter_by(master_draw=False, been_played=False).all()
+        admin_lottery = User.query.filter_by(id=current_winning_draw.user_id).first()
         results = []
 
         # if at least one unplayed user draw exists
@@ -114,42 +114,39 @@ def run_lottery():
 
             # for each unplayed user draw
             for draw in user_draws:
-                draw_copy = draw###
+                # use a draw copy as the original draw will become transient, and we need to change some values
+                draw_copy = draw
                 # get the owning user (instance/object)
                 user = User.query.filter_by(id=draw.user_id).first()
 
-                # Decrypt the user draws and master draw####
+                # Decrypt the user draws and master draw
                 make_transient(draw)
                 draw.view_lottery_draw(draw_key=user.lottery_draw_key)
 
                 make_transient(current_winning_draw)
-                current_winning_draw.view_lottery_draw(draw_key=current_user.lottery_draw_key)
-                print(f"\n\n1 DRAW NUMBERS: {draw.numbers}\n\n")#########
-                print(f'\n\n1 ADMIN NUMBERS: {current_winning_draw.numbers}\n\n')
+                current_winning_draw.view_lottery_draw(draw_key=admin_lottery.lottery_draw_key)
+
                 # if user draw matches current unplayed winning draw
                 if draw.numbers == current_winning_draw.numbers:
 
                     # add details of winner to list of results
                     results.append((current_winning_draw.lottery_round, draw.numbers, draw.user_id, user.email))
-                    print(f'\n\n5: {results}\n\n')
                     # update draw as a winning draw (this will be used to highlight winning draws in the user's
                     # lottery page)
-                    draw_copy.matches_master = True#draw
-                    ###
+                    draw_copy.matches_master = True
+
                     db.session.add(draw_copy)
                     db.session.commit()
 
                 # update draw as played
-                draw_copy.been_played = True#draw
-                print(f"\n\n2: {draw}\n\n")##########
+                draw_copy.been_played = True
 
                 # update draw with current lottery round
-                draw_copy.lottery_round = current_winning_draw.lottery_round#draw
-                print(f'\n\n3: {draw}\n\n')############
+                draw_copy.lottery_round = current_winning_draw.lottery_round
+
                 # commit draw changes to DB
-                db.session.add(draw_copy)#draw
+                db.session.add(draw_copy)
                 db.session.commit()
-                print(f'\n\n4: {draw}\n\n')##########
 
             # if no winners
             if len(results) == 0:

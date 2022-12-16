@@ -2,3 +2,7 @@
 11/24/2022 04:16:30 PM : Security - Log out [1, admin@email.com, 127.0.0.1]
 11/24/2022 04:17:01 PM : Security - User registration [gab@gmail.com, 127.0.0.1]
 11/24/2022 04:17:10 PM : Security - Log in [6, gab@gmail.com, 127.0.0.1]
+12/16/2022 09:33:25 AM : Security - Log in [2, luca@gmail.com, 127.0.0.1]
+12/16/2022 09:33:35 AM : Security - Log out [2, luca@gmail.com, 127.0.0.1]
+12/16/2022 09:33:43 AM : Security - Log in [1, admin@email.com, 127.0.0.1]
+12/16/2022 09:48:15 AM : Security - Log in [1, admin@email.com, 127.0.0.1]
