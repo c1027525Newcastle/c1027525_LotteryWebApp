@@ -6,3 +6,5 @@
 12/16/2022 09:33:35 AM : Security - Log out [2, luca@gmail.com, 127.0.0.1]
 12/16/2022 09:33:43 AM : Security - Log in [1, admin@email.com, 127.0.0.1]
 12/16/2022 09:48:15 AM : Security - Log in [1, admin@email.com, 127.0.0.1]
+12/16/2022 10:07:47 AM : Security - User registration [gruia@gmail.com, 127.0.0.1]
+12/16/2022 10:08:55 AM : Security - Log in [8, gruia@gmail.com, 127.0.0.1]
