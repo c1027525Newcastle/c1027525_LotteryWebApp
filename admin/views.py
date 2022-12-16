@@ -101,7 +101,6 @@ def run_lottery():
 
         # get all unplayed user draws
         user_draws = Draw.query.filter_by(master_draw=False, been_played=False).all()
-        admin_lottery = User.query.filter_by(id=current_winning_draw.user_id).first()
         results = []
 
         # if at least one unplayed user draw exists
@@ -114,17 +113,13 @@ def run_lottery():
 
             # for each unplayed user draw
             for draw in user_draws:
-                # use a draw copy as the original draw will become transient, and we need to change some values
-                draw_copy = draw
                 # get the owning user (instance/object)
                 user = User.query.filter_by(id=draw.user_id).first()
 
                 # Decrypt the user draws and master draw
-                make_transient(draw)
                 draw.view_lottery_draw(draw_key=user.lottery_draw_key)
 
-                make_transient(current_winning_draw)
-                current_winning_draw.view_lottery_draw(draw_key=admin_lottery.lottery_draw_key)
+                current_winning_draw.view_lottery_draw(draw_key=current_user.lottery_draw_key)
 
                 # if user draw matches current unplayed winning draw
                 if draw.numbers == current_winning_draw.numbers:
@@ -133,19 +128,19 @@ def run_lottery():
                     results.append((current_winning_draw.lottery_round, draw.numbers, draw.user_id, user.email))
                     # update draw as a winning draw (this will be used to highlight winning draws in the user's
                     # lottery page)
-                    draw_copy.matches_master = True
+                    draw.matches_master = True
 
-                    db.session.add(draw_copy)
+                    db.session.add(draw)
                     db.session.commit()
 
                 # update draw as played
-                draw_copy.been_played = True
+                draw.been_played = True
 
                 # update draw with current lottery round
-                draw_copy.lottery_round = current_winning_draw.lottery_round
+                draw.lottery_round = current_winning_draw.lottery_round
 
                 # commit draw changes to DB
-                db.session.add(draw_copy)
+                db.session.add(draw)
                 db.session.commit()
 
             # if no winners
